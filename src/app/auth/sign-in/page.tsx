@@ -23,6 +23,7 @@
 */
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 // Chakra imports
 import {
   Box,
@@ -49,6 +50,7 @@ import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { RiEyeCloseLine } from 'react-icons/ri';
 
 export default function SignIn() {
+  const router = useRouter();
   // Chakra color mode
   const textColor = useColorModeValue('navy.700', 'white');
   const textColorSecondary = 'gray.400';
@@ -65,8 +67,14 @@ export default function SignIn() {
     { bg: 'secondaryGray.300' },
     { bg: 'whiteAlpha.200' },
   );
+  const demoBg = useColorModeValue('brand.100', 'whiteAlpha.100');
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
+  const [email, setEmail] = React.useState('demo@clubhouse.app');
+  const [password, setPassword] = React.useState('password123');
+  const handleSignIn = () => {
+    router.push('/admin/default');
+  };
   return (
     <DefaultAuthLayout illustrationBackground={'/img/auth/auth.png'}>
       <Flex
@@ -94,6 +102,21 @@ export default function SignIn() {
             fontSize="md"
           >
             Enter your email and password to sign in!
+          </Text>
+        </Box>
+        <Box
+          bg={demoBg}
+          borderRadius="12px"
+          px="16px"
+          py="12px"
+          mb="20px"
+          w={{ base: '100%', md: '420px' }}
+        >
+          <Text fontSize="sm" fontWeight="600" color={textColor} mb="4px">
+            🎮 Demo Credentials
+          </Text>
+          <Text fontSize="xs" color={textColorSecondary}>
+            Email: demo@clubhouse.app &nbsp;|&nbsp; Password: password123
           </Text>
         </Box>
         <Flex
@@ -152,6 +175,8 @@ export default function SignIn() {
               mb="24px"
               fontWeight="500"
               size="lg"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <FormLabel
               ms="4px"
@@ -171,6 +196,8 @@ export default function SignIn() {
                 size="lg"
                 type={show ? 'text' : 'password'}
                 variant="auth"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <InputRightElement display="flex" alignItems="center" mt="4px">
                 <Icon
@@ -216,6 +243,7 @@ export default function SignIn() {
               w="100%"
               h="50"
               mb="24px"
+              onClick={handleSignIn}
             >
               Sign In
             </Button>
