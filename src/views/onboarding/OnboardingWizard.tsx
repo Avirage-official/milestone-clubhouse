@@ -100,7 +100,7 @@ export default function OnboardingWizard() {
 
   // ---- step helpers ----
   const next = useCallback(() => setStep((s) => Math.min(s + 1, TOTAL_STEPS - 1)), []);
-  const prev = () => setStep((s) => Math.max(s - 1, 0));
+  const prev = useCallback(() => setStep((s) => Math.max(s - 1, 0)), []);
 
   const finish = useCallback(async () => {
     await saveOnboardingProfile(data);
