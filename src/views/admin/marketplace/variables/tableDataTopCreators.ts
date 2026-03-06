@@ -26,12 +26,12 @@ const tableColumnsTopCreators: RowObj[] = [
     rating:68
   },
   {
-    name: ["@milestone","https://i.ibb.co/7p0d1Cd/Frame-24.png"],
+    name: ["@milestone.web","https://i.ibb.co/7p0d1Cd/Frame-24.png"],
     artworks : 3871,
     rating:55
   },
   {
-    name: ["@milestone","https://i.ibb.co/NSJYQYD/Horizon-UI-Avatar.png"],
+    name: ["@milestone.ui","https://i.ibb.co/NSJYQYD/Horizon-UI-Avatar.png"],
     artworks : 3152,
     rating:46
   },
