@@ -36,6 +36,7 @@ export default function StepAboutYou({ data, onChange }: StepAboutYouProps) {
   return (
     <Stack spacing="24px">
       <Box>
+        <Text fontSize="3xl" mb="4px">👋</Text>
         <Heading size="lg" color={textColor} mb="8px">
           About you
         </Heading>

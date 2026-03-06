@@ -49,11 +49,12 @@ export default function StepPetSetup({ data, onChange }: StepPetSetupProps) {
   return (
     <Stack spacing="24px">
       <Box>
+        <Text fontSize="3xl" mb="4px">🐾</Text>
         <Heading size="lg" color={textColor} mb="8px">
           Pet setup
         </Heading>
         <Text color="secondaryGray.600" fontSize="md">
-          Every clubhouse member gets a companion pet!
+          Every Milestone member gets a companion pet!
         </Text>
       </Box>
 
@@ -72,9 +73,14 @@ export default function StepPetSetup({ data, onChange }: StepPetSetupProps) {
               p="16px"
               textAlign="center"
               cursor="pointer"
-              transition="all 0.2s"
-              _hover={{ borderColor: selectedBorder }}
+              transition="all 0.25s ease"
+              _hover={{
+                borderColor: selectedBorder,
+                transform: 'scale(1.05)',
+              }}
               onClick={() => onChange({ ...data, pet: p.value })}
+              transform={data.pet === p.value ? 'scale(1.05)' : 'none'}
+              boxShadow={data.pet === p.value ? 'md' : 'none'}
             >
               <Text fontSize="3xl" mb="4px">
                 {p.emoji}

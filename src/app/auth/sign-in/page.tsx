@@ -1,30 +1,15 @@
 'use client';
-/* eslint-disable */
 /*!
-  _   _  ___  ____  ___ ________  _   _   _   _ ___   
- | | | |/ _ \|  _ \|_ _|__  / _ \| \ | | | | | |_ _| 
- | |_| | | | | |_) || |  / / | | |  \| | | | | || | 
- |  _  | |_| |  _ < | | / /| |_| | |\  | | |_| || |
- |_| |_|\___/|_| \_\___/____\___/|_| \_|  \___/|___|
-                                                                                                                                                                                                                                                                                                                                       
 =========================================================
-* Milestone - v1.1.0
+* Milestone Clubhouse - v1.1.0
 =========================================================
-
-* Product Page: 
-* Copyright 2022 Milestone ()
-
+* Copyright 2022 Milestone
 * Designed and Coded by Milestone
-
 =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
 */
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-// Chakra imports
 import {
   Box,
   Button,
@@ -38,20 +23,23 @@ import {
   InputGroup,
   InputRightElement,
   Text,
+  keyframes,
   useColorModeValue,
 } from '@chakra-ui/react';
-// Custom components
 import { HSeparator } from 'components/separator/Separator';
 import DefaultAuthLayout from 'layouts/auth/Default';
-// Assets
 import Link from 'next/link';
 import { FcGoogle } from 'react-icons/fc';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { RiEyeCloseLine } from 'react-icons/ri';
 
+const fadeInUp = keyframes`
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
+
 export default function SignIn() {
   const router = useRouter();
-  // Chakra color mode
   const textColor = useColorModeValue('navy.700', 'white');
   const textColorSecondary = 'gray.400';
   const textColorDetails = useColorModeValue('navy.700', 'secondaryGray.600');
@@ -90,9 +78,9 @@ export default function SignIn() {
         mt={{ base: '40px', md: '14vh' }}
         flexDirection="column"
       >
-        <Box me="auto">
+        <Box me="auto" animation={`${fadeInUp} 0.6s ease-out`}>
           <Heading color={textColor} fontSize="36px" mb="10px">
-            Sign In
+            Welcome to Milestone
           </Heading>
           <Text
             mb="36px"
@@ -111,6 +99,7 @@ export default function SignIn() {
           py="12px"
           mb="20px"
           w={{ base: '100%', md: '420px' }}
+          animation={`${fadeInUp} 0.6s ease-out 0.1s both`}
         >
           <Text fontSize="sm" fontWeight="600" color={textColor} mb="4px">
             🎮 Demo Credentials
@@ -129,6 +118,7 @@ export default function SignIn() {
           mx={{ base: 'auto', lg: 'unset' }}
           me="auto"
           mb={{ base: '20px', md: 'auto' }}
+          animation={`${fadeInUp} 0.6s ease-out 0.2s both`}
         >
           <Button
             fontSize="sm"
@@ -143,6 +133,7 @@ export default function SignIn() {
             _hover={googleHover}
             _active={googleActive}
             _focus={googleActive}
+            transition="all 0.2s ease"
           >
             <Icon as={FcGoogle} w="20px" h="20px" me="10px" />
             Sign in with Google
@@ -244,6 +235,9 @@ export default function SignIn() {
               h="50"
               mb="24px"
               onClick={handleSignIn}
+              transition="all 0.2s ease"
+              _hover={{ transform: 'translateY(-1px)', boxShadow: 'lg' }}
+              _active={{ transform: 'translateY(0px)' }}
             >
               Sign In
             </Button>
