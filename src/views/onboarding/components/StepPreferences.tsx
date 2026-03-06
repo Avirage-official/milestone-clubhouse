@@ -31,15 +31,22 @@ export default function StepPreferences({
   return (
     <Stack spacing="28px">
       <Box>
+        <Text fontSize="3xl" mb="4px">🔔</Text>
         <Heading size="lg" color={textColor} mb="8px">
           Nudge preferences
         </Heading>
         <Text color="secondaryGray.600" fontSize="md">
-          Choose how you&apos;d like us to nudge you throughout the day.
+          Almost done! Choose how you&apos;d like us to nudge you throughout the day.
         </Text>
       </Box>
 
-      <Flex justify="space-between" align="center">
+      <Flex
+        justify="space-between"
+        align="center"
+        bg={useColorModeValue('secondaryGray.300', 'navy.900')}
+        borderRadius="16px"
+        p="16px"
+      >
         <Box>
           <Text fontWeight="500" color={textColor} fontSize="md">
             Send me gentle break reminders
@@ -68,8 +75,8 @@ export default function StepPreferences({
           colorScheme="brandScheme"
         >
           <Stack spacing="10px">
-            <Radio value="Chill">Chill</Radio>
-            <Radio value="Playful">Playful</Radio>
+            <Radio value="Chill">🧊 Chill — calm and minimal</Radio>
+            <Radio value="Playful">🎉 Playful — fun and engaging</Radio>
           </Stack>
         </RadioGroup>
       </Box>

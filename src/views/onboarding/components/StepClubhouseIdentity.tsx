@@ -42,8 +42,9 @@ export default function StepClubhouseIdentity({
   return (
     <Stack spacing="24px">
       <Box>
+        <Text fontSize="3xl" mb="4px">🎨</Text>
         <Heading size="lg" color={textColor} mb="8px">
-          Clubhouse identity
+          Your Milestone identity
         </Heading>
         <Text color="secondaryGray.600" fontSize="md">
           Pick a name and theme for your profile.
@@ -52,7 +53,7 @@ export default function StepClubhouseIdentity({
 
       <FormControl>
         <FormLabel fontSize="sm" fontWeight="500" color={textColor}>
-          Clubhouse name<Text as="span" color={brandStars}>*</Text>
+          Display name<Text as="span" color={brandStars}>*</Text>
         </FormLabel>
         <Input
           variant="auth"
@@ -79,9 +80,15 @@ export default function StepClubhouseIdentity({
               p="16px"
               textAlign="center"
               cursor="pointer"
-              transition="all 0.2s"
-              _hover={{ borderColor: selectedBorder }}
+              transition="all 0.25s ease"
+              _hover={{
+                borderColor: selectedBorder,
+                transform: 'translateY(-2px)',
+                boxShadow: 'md',
+              }}
               onClick={() => onChange({ ...data, theme: t.value })}
+              transform={data.theme === t.value ? 'translateY(-2px)' : 'none'}
+              boxShadow={data.theme === t.value ? 'md' : 'none'}
             >
               <Text fontSize="2xl" mb="6px">
                 {t.label.split(' ')[0]}

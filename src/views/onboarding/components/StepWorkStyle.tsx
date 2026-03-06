@@ -20,11 +20,16 @@ interface StepWorkStyleProps {
   onChange: (data: StepWorkStyleData) => void;
 }
 
-const FOCUS_OPTIONS = ['Morning', 'Afternoon', 'Evening'];
+const FOCUS_OPTIONS = [
+  { value: 'Morning', label: '🌅 Morning' },
+  { value: 'Afternoon', label: '☀️ Afternoon' },
+  { value: 'Evening', label: '🌙 Evening' },
+];
+
 const STYLE_OPTIONS = [
-  { value: 'Sprinter', label: '⚡ Sprinter' },
-  { value: 'Steady', label: '🧘 Steady' },
-  { value: 'Juggler', label: '🐙 Juggler' },
+  { value: 'Sprinter', label: '⚡ Sprinter', desc: 'Short bursts of intense focus' },
+  { value: 'Steady', label: '🧘 Steady', desc: 'Consistent, balanced pace' },
+  { value: 'Juggler', label: '🐙 Juggler', desc: 'Multitask and switch contexts' },
 ];
 
 export default function StepWorkStyle({ data, onChange }: StepWorkStyleProps) {
@@ -33,6 +38,7 @@ export default function StepWorkStyle({ data, onChange }: StepWorkStyleProps) {
   return (
     <Stack spacing="28px">
       <Box>
+        <Text fontSize="3xl" mb="4px">⚙️</Text>
         <Heading size="lg" color={textColor} mb="8px">
           Work style
         </Heading>
@@ -52,8 +58,8 @@ export default function StepWorkStyle({ data, onChange }: StepWorkStyleProps) {
         >
           <Stack spacing="10px">
             {FOCUS_OPTIONS.map((opt) => (
-              <Radio key={opt} value={opt}>
-                {opt}
+              <Radio key={opt.value} value={opt.value}>
+                {opt.label}
               </Radio>
             ))}
           </Stack>
@@ -72,7 +78,12 @@ export default function StepWorkStyle({ data, onChange }: StepWorkStyleProps) {
           <Stack spacing="10px">
             {STYLE_OPTIONS.map((opt) => (
               <Radio key={opt.value} value={opt.value}>
-                {opt.label}
+                <Box>
+                  <Text fontWeight="500">{opt.label}</Text>
+                  <Text fontSize="xs" color="secondaryGray.600">
+                    {opt.desc}
+                  </Text>
+                </Box>
               </Radio>
             ))}
           </Stack>
