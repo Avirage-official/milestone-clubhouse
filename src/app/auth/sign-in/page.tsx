@@ -73,7 +73,7 @@ export default function SignIn() {
   const [email, setEmail] = React.useState('demo@clubhouse.app');
   const [password, setPassword] = React.useState('password123');
   const handleSignIn = () => {
-    router.push('/admin/default');
+    router.push('/onboarding');
   };
   return (
     <DefaultAuthLayout illustrationBackground={'/img/auth/auth.png'}>
