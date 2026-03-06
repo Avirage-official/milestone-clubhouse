@@ -8,14 +8,14 @@ type RowObj = {
 
 const tableDataCheck: RowObj[] = [
 	{
-		name: [ 'Horizon UI PRO', true ],
+		name: [ 'Milestone PRO', true ],
 		quantity: 2458,
 		progress: '17.5%',
 		date: '12 Jan 2021',
 		info: false
 	},
 	{
-		name: [ 'Horizon UI Free', true ],
+		name: [ 'Milestone Free', true ],
 		quantity: 1485,
 		progress: '10.8%',
 		date: '21 Feb 2021',
@@ -43,7 +43,7 @@ const tableDataCheck: RowObj[] = [
 		info: false
 	},
 	{
-		name: [ 'Horizon UI Free', true ],
+		name: [ 'Milestone Free', true ],
 		quantity: 1485,
 		progress: '10.8%',
 		date: '21 Feb 2021',
@@ -64,7 +64,7 @@ const tableDataCheck: RowObj[] = [
 		info: true
 	},
 	{
-		name: [ 'Horizon UI Free', true ],
+		name: [ 'Milestone Free', true ],
 		quantity: 1485,
 		progress: '10.8%',
 		date: '21 Feb 2021',

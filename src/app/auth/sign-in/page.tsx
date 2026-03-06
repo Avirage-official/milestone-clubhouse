@@ -8,13 +8,13 @@
  |_| |_|\___/|_| \_\___/____\___/|_| \_|  \___/|___|
                                                                                                                                                                                                                                                                                                                                        
 =========================================================
-* Horizon UI - v1.1.0
+* Milestone - v1.1.0
 =========================================================
 
-* Product Page: https://www.horizon-ui.com/
-* Copyright 2022 Horizon UI (https://www.horizon-ui.com/)
+* Product Page: 
+* Copyright 2022 Milestone ()
 
-* Designed and Coded by Simmmple
+* Designed and Coded by Milestone
 
 =========================================================
 
@@ -171,7 +171,7 @@ export default function SignIn() {
               fontSize="sm"
               ms={{ base: '0px', md: '0px' }}
               type="email"
-              placeholder="mail@simmmple.com"
+              placeholder="mail@milestone.com"
               mb="24px"
               fontWeight="500"
               size="lg"

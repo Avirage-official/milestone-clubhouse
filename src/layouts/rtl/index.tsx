@@ -50,7 +50,7 @@ export default function RTLLayout(props: RTLLayoutProps) {
 							<Box>
 								<Navbar
 									onOpen={onOpen}
-									logoText={'Horizon UI Dashboard'}
+									logoText={'Milestone Dashboard'}
 									brandText={getActiveRoute(routes)}
 									secondary={getActiveNavbar(routes)}
 									message={getActiveNavbarText(routes)}

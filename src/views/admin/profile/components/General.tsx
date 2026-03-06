@@ -26,7 +26,7 @@ export default function GeneralInformation(props: { [x: string]: any }) {
 				<Information boxShadow={cardShadow} title='Languages' value='English, Spanish, Italian' />
 				<Information boxShadow={cardShadow} title='Department' value='Product Design' />
 				<Information boxShadow={cardShadow} title='Work History' value='Google, Facebook' />
-				<Information boxShadow={cardShadow} title='Organization' value='Simmmple Web LLC' />
+				<Information boxShadow={cardShadow} title='Organization' value='Milestone' />
 				<Information boxShadow={cardShadow} title='Birthday' value='20 July 1986' />
 			</SimpleGrid>
 		</Card>

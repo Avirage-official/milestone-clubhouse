@@ -148,7 +148,7 @@ export default function HeaderLinks(props: {
               borderRadius="8px"
               mb="10px"
             >
-              <ItemContent info="Horizon UI Dashboard PRO" />
+              <ItemContent info="Milestone Dashboard" />
             </MenuItem>
             <MenuItem
               _hover={{ bg: 'none' }}
@@ -157,7 +157,7 @@ export default function HeaderLinks(props: {
               borderRadius="8px"
               mb="10px"
             >
-              <ItemContent info="Horizon Design System Free" />
+              <ItemContent info="Milestone Design System Free" />
             </MenuItem>
           </Flex>
         </MenuList>
@@ -187,14 +187,14 @@ export default function HeaderLinks(props: {
         >
           <Image src={navImage.src} borderRadius="16px" mb="28px" alt="" />
           <Flex flexDirection="column">
-            <Link w="100%" href="https://horizon-ui.com/pro">
+            <Link w="100%" href="">
               <Button w="100%" h="44px" mb="10px" variant="brand">
-                Buy Horizon UI PRO
+                Buy Milestone PRO
               </Button>
             </Link>
             <Link
               w="100%"
-              href="https://horizon-ui.com/documentation/docs/introduction"
+              href=""
             >
               <Button
                 w="100%"
@@ -209,7 +209,7 @@ export default function HeaderLinks(props: {
             </Link>
             <Link
               w="100%"
-              href="https://github.com/horizon-ui/horizon-ui-chakra-nextjs"
+              href="https://github.com/Avirage-official/milestone-clubhouse"
             >
               <Button
                 w="100%"
@@ -218,7 +218,7 @@ export default function HeaderLinks(props: {
                 color={textColor}
                 bg="transparent"
               >
-                Try Horizon Free
+                Try Milestone Free
               </Button>
             </Link>
           </Flex>
