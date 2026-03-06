@@ -198,20 +198,27 @@ export default function OnboardingWizard() {
   }, [data, router, clearStorage]);
 
   // ---- handle browser back button ----
+  const stepRef = useRef(step);
+  stepRef.current = step;
+
   useEffect(() => {
+    // Push a single history entry on mount so we can intercept back
+    window.history.pushState(null, '', window.location.href);
+
     const handlePopState = () => {
-      if (step > 0) {
-        prev();
-        // Push a new entry so back button can be used again
-        window.history.pushState(null, '', window.location.href);
+      if (stepRef.current > 0) {
+        setDirection(-1);
+        setAnimKey((k) => k + 1);
+        setStep((s) => Math.max(s - 1, 0));
       }
+      // Re-push so the next back press is also intercepted
+      window.history.pushState(null, '', window.location.href);
     };
 
-    // Push an initial entry so we can intercept back
-    window.history.pushState(null, '', window.location.href);
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [step, prev]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // ---- autonomous demo ----
   useEffect(() => {
@@ -297,7 +304,7 @@ export default function OnboardingWizard() {
           color={subtleText}
           mb="28px"
         >
-          Let&apos;s set up your clubhouse
+          Let&apos;s set up your Milestone profile
         </Text>
 
         {/* Progress bar */}
