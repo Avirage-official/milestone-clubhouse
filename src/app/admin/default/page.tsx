@@ -15,6 +15,7 @@ import PetPlaceholder from 'views/admin/home/components/PetPlaceholder';
 import WorkFocusCard from 'views/admin/home/components/WorkFocusCard';
 import WellnessBreaksCard from 'views/admin/home/components/WellnessBreaksCard';
 import SocialFunCards from 'views/admin/home/components/SocialFunCards';
+import WorkspaceToolsCard from 'views/admin/home/components/WorkspaceToolsCard';
 
 export default function Home() {
   const textColor = useColorModeValue('secondaryGray.900', 'white');
@@ -89,6 +90,11 @@ export default function Home() {
       {/* D. Social & Fun */}
       <Box mb="20px">
         <SocialFunCards />
+      </Box>
+
+      {/* E. Workspace Tools */}
+      <Box mb="20px">
+        <WorkspaceToolsCard />
       </Box>
     </Box>
   );
