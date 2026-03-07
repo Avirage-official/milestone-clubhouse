@@ -109,7 +109,7 @@ export default function Playground() {
   const toast = useToast();
   const textColor = useColorModeValue('secondaryGray.900', 'white');
   const brandColor = useColorModeValue('brand.500', 'brand.400');
-  const badgeBg = useColorModeValue('green.100', 'green.500');
+  const badgeAvailableBg = useColorModeValue('green.100', 'green.500');
   const badgeCooldownBg = useColorModeValue('orange.100', 'orange.500');
 
   // Load state from localStorage
@@ -121,8 +121,8 @@ export default function Playground() {
       if (storedXp) setXp(parseInt(storedXp, 10));
       if (storedTime) setLastXpGameTime(parseInt(storedTime, 10));
       if (storedQuests) setQuestsDone(JSON.parse(storedQuests));
-    } catch {
-      // ignore parse errors
+    } catch (e) {
+      console.warn('Failed to load playground state from localStorage:', e);
     }
   }, []);
 
@@ -264,7 +264,7 @@ export default function Playground() {
                   px="8px"
                   py="2px"
                   borderRadius="8px"
-                  bg={xpAvailable ? badgeBg : badgeCooldownBg}
+                  bg={xpAvailable ? badgeAvailableBg : badgeCooldownBg}
                   color={xpAvailable ? 'green.700' : 'orange.700'}
                   fontSize="xs"
                   fontWeight="600"

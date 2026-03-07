@@ -17,14 +17,15 @@ import { useState, useEffect, useCallback } from 'react';
 
 const WORDS = ['focus', 'mindful', 'energy', 'balance', 'growth'];
 
-function scrambleWord(word: string): string {
+function scrambleWord(word: string, depth = 0): string {
   const arr = word.split('');
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
   const scrambled = arr.join('');
-  return scrambled === word ? scrambleWord(word) : scrambled;
+  if (scrambled !== word || depth >= 10) return scrambled;
+  return scrambleWord(word, depth + 1);
 }
 
 export default function WordScrambleGame(props: {
