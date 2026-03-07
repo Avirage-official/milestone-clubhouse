@@ -1,5 +1,5 @@
 // Chakra imports
-import { Portal, Box, useDisclosure } from '@chakra-ui/react'
+import { Portal, Box, useDisclosure, keyframes } from '@chakra-ui/react'
 import Footer from 'components/footer/FooterAdmin'
 // Layout components
 import Navbar from 'components/navbar/NavbarAdmin'
@@ -13,6 +13,11 @@ import {
   getActiveRoute,
   isWindowAvailable
 } from 'utils/navigation'
+
+const fadeSlideUp = keyframes`
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+`
 
 interface DashboardLayoutProps extends PropsWithChildren {
   [x: string]: any
@@ -58,7 +63,7 @@ export default function AdminLayout (props: DashboardLayoutProps) {
             <Box>
               <Navbar
                 onOpen={onOpen}
-                logoText={'Milestone Dashboard'}
+                logoText={'Milestone Clubhouse'}
                 brandText={getActiveRoute(routes)}
                 secondary={getActiveNavbar(routes)}
                 message={getActiveNavbarText(routes)}
@@ -74,6 +79,7 @@ export default function AdminLayout (props: DashboardLayoutProps) {
             pe='20px'
             minH='100vh'
             pt='50px'
+            animation={`${fadeSlideUp} 0.5s ease-out`}
           >
             {children}
           </Box>

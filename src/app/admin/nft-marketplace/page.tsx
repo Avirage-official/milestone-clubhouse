@@ -19,6 +19,7 @@ import {
   Text,
   useColorModeValue,
   useToast,
+  keyframes,
 } from '@chakra-ui/react';
 import {
   MdSelfImprovement,
@@ -42,6 +43,11 @@ function getRank(xp: number): string {
 
 // --- Cooldown: 1 hour ---
 const COOLDOWN_MS = 60 * 60 * 1000;
+
+const fadeUp = keyframes`
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
 
 // --- Game definitions ---
 const GAMES = [
@@ -191,7 +197,7 @@ export default function Playground() {
   return (
     <Box pt={{ base: '180px', md: '80px', xl: '80px' }}>
       {/* --- Status Bar --- */}
-      <Card mb="20px" p="20px">
+      <Card mb="20px" p="20px" sx={{ animation: `${fadeUp} 0.4s ease-out` }}>
         <Flex
           direction={{ base: 'column', md: 'row' }}
           justify="space-between"
@@ -235,7 +241,7 @@ export default function Playground() {
       >
         Mini-games
       </Text>
-      <SimpleGrid columns={{ base: 1, md: 2, xl: 4 }} gap="20px" mb="30px">
+      <SimpleGrid columns={{ base: 1, md: 2, xl: 4 }} gap="20px" mb="30px" animation={`${fadeUp} 0.6s ease-out`}>
         {GAMES.map((game) => (
           <Card key={game.id} p="20px">
             <Flex direction="column" justify="space-between" h="100%">
@@ -276,10 +282,12 @@ export default function Playground() {
                   color="white"
                   fontSize="sm"
                   fontWeight="500"
-                  borderRadius="70px"
+                  borderRadius="full"
                   px="24px"
                   py="5px"
                   onClick={() => setActiveGame(game.id)}
+                  transition="all 0.25s ease"
+                  _hover={{ transform: 'scale(1.05)', boxShadow: '0 4px 15px rgba(66, 42, 251, 0.3)' }}
                 >
                   Play
                 </Button>
@@ -299,7 +307,7 @@ export default function Playground() {
       >
         Today&apos;s Quests
       </Text>
-      <SimpleGrid columns={{ base: 1, md: 3 }} gap="20px" mb="20px">
+      <SimpleGrid columns={{ base: 1, md: 3 }} gap="20px" mb="20px" animation={`${fadeUp} 0.8s ease-out`}>
         {QUESTS.map((quest) => (
           <Card key={quest.id} p="20px">
             <Flex direction="column" justify="space-between" h="100%">

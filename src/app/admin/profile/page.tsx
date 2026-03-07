@@ -22,13 +22,18 @@
 */
 
 import { useState } from 'react';
-import { Box, Grid, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Grid, Text, useColorModeValue, keyframes } from '@chakra-ui/react';
 
 // Custom components
 import IdentityCard from 'views/admin/profile/components/IdentityCard';
 import PetSettingsCard from 'views/admin/profile/components/PetSettingsCard';
 import PreferencesCard from 'views/admin/profile/components/PreferencesCard';
 import PrivacyNote from 'views/admin/profile/components/PrivacyNote';
+
+const fadeUp = keyframes`
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
 
 interface ProfileState {
   // Identity
@@ -74,7 +79,7 @@ export default function ProfileAndPet() {
 
   return (
     <Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
-      <Box mb="20px">
+      <Box mb="20px" animation={`${fadeUp} 0.4s ease-out`}>
         <Text color={textColorPrimary} fontWeight="bold" fontSize="2xl">
           Profile &amp; Pet
         </Text>
@@ -90,6 +95,7 @@ export default function ProfileAndPet() {
         }}
         gap={{ base: '20px', xl: '20px' }}
         mb="20px"
+        animation={`${fadeUp} 0.55s ease-out`}
       >
         <IdentityCard
           firstName={state.firstName}
@@ -113,6 +119,7 @@ export default function ProfileAndPet() {
         }}
         gap={{ base: '20px', xl: '20px' }}
         mb="20px"
+        animation={`${fadeUp} 0.7s ease-out`}
       >
         <PreferencesCard
           breakReminders={state.breakReminders}

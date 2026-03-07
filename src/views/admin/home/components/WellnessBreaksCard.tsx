@@ -74,16 +74,24 @@ export default function WellnessBreaksCard() {
 
       {gameState === 'idle' && (
         <Flex gap="12px" wrap="wrap">
-          <Button colorScheme="brand" borderRadius="10px" onClick={beginWork}>
-            Start work session
+          <Button
+            colorScheme="brand"
+            borderRadius="full"
+            onClick={beginWork}
+            transition="all 0.25s ease"
+            _hover={{ transform: 'scale(1.05)', boxShadow: '0 4px 15px rgba(66, 42, 251, 0.3)' }}
+          >
+            🚀 Start work session
           </Button>
           <Button
             variant="outline"
             colorScheme="brand"
-            borderRadius="10px"
+            borderRadius="full"
             onClick={startGame}
+            transition="all 0.25s ease"
+            _hover={{ transform: 'scale(1.05)' }}
           >
-            Play micro game
+            🎮 Play micro game
           </Button>
         </Flex>
       )}
@@ -91,9 +99,10 @@ export default function WellnessBreaksCard() {
       {gameState === 'playing' && (
         <Box
           bg={gameBg}
-          borderRadius="16px"
+          borderRadius="20px"
           p="20px"
           textAlign="center"
+          transition="all 0.3s ease"
         >
           <Text fontSize="md" fontWeight="600" color={textColor}>
             🎮 Playing micro game…
@@ -109,8 +118,14 @@ export default function WellnessBreaksCard() {
           <Text fontSize="md" fontWeight="600" color="green.500" mb="12px">
             ✅ Game complete!
           </Text>
-          <Button colorScheme="brand" borderRadius="10px" onClick={beginWork}>
-            Begin work
+          <Button
+            colorScheme="brand"
+            borderRadius="full"
+            onClick={beginWork}
+            transition="all 0.25s ease"
+            _hover={{ transform: 'scale(1.05)', boxShadow: '0 4px 15px rgba(66, 42, 251, 0.3)' }}
+          >
+            🚀 Begin work
           </Button>
         </Box>
       )}
@@ -133,10 +148,10 @@ export default function WellnessBreaksCard() {
             <Button
               variant="outline"
               colorScheme="brand"
-              borderRadius="10px"
+              borderRadius="full"
               isDisabled
             >
-              Play micro game
+              🎮 Play micro game
             </Button>
           </Tooltip>
         </Box>

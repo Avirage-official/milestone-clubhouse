@@ -50,7 +50,7 @@ export default function RTLLayout(props: RTLLayoutProps) {
 							<Box>
 								<Navbar
 									onOpen={onOpen}
-									logoText={'Milestone Dashboard'}
+									logoText={'Milestone Clubhouse'}
 									brandText={getActiveRoute(routes)}
 									secondary={getActiveNavbar(routes)}
 									message={getActiveNavbarText(routes)}

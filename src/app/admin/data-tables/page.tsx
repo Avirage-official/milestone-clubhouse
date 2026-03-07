@@ -20,6 +20,7 @@ import {
   Thead,
   Tr,
   useColorModeValue,
+  keyframes,
 } from '@chakra-ui/react';
 import Card from 'components/card/Card';
 
@@ -33,6 +34,11 @@ function getRankTitle(xp: number): string {
 
 // --- Current user ---
 const currentUser = 'NovaFox';
+
+const fadeUp = keyframes`
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
 
 // --- Mock data ---
 const topXpData = [
@@ -212,7 +218,7 @@ export default function HallOfFame() {
   return (
     <Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
       {/* Page heading */}
-      <Flex direction="column" mb="20px">
+      <Flex direction="column" mb="20px" animation={`${fadeUp} 0.4s ease-out`}>
         <Text color={textColor} fontSize="2xl" fontWeight="700">
           Hall of Fame
         </Text>
@@ -222,7 +228,7 @@ export default function HallOfFame() {
       </Flex>
 
       {/* Your Standing card */}
-      <Card flexDirection="column" w="100%" mb="20px" p="20px">
+      <Card flexDirection="column" w="100%" mb="20px" p="20px" sx={{ animation: `${fadeUp} 0.55s ease-out` }}>
         <Text color={textColor} fontSize="22px" fontWeight="700" mb="12px">
           Your Standing
         </Text>
@@ -247,6 +253,7 @@ export default function HallOfFame() {
         mb="20px"
         columns={{ sm: 1, md: 2 }}
         spacing={{ base: '20px', xl: '20px' }}
+        animation={`${fadeUp} 0.7s ease-out`}
       >
         <LeaderboardCard
           title="Top XP"
