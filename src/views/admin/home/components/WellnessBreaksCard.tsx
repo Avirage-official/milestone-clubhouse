@@ -60,10 +60,6 @@ export default function WellnessBreaksCard() {
     }, 1000);
   };
 
-  const startWorkSession = () => {
-    beginWork();
-  };
-
   const formatTime = (s: number) => {
     const m = Math.floor(s / 60);
     const sec = s % 60;
@@ -78,7 +74,7 @@ export default function WellnessBreaksCard() {
 
       {gameState === 'idle' && (
         <Flex gap="12px" wrap="wrap">
-          <Button colorScheme="brand" borderRadius="10px" onClick={startWorkSession}>
+          <Button colorScheme="brand" borderRadius="10px" onClick={beginWork}>
             Start work session
           </Button>
           <Button

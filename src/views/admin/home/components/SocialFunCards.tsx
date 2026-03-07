@@ -104,6 +104,15 @@ function SongOfTheDayCard() {
     'secondaryGray.400',
   );
 
+  const isValidUrl = (value: string) => {
+    try {
+      const parsed = new URL(value);
+      return parsed.protocol === 'https:' || parsed.protocol === 'http:';
+    } catch {
+      return false;
+    }
+  };
+
   return (
     <Card>
       <Text fontSize="sm" fontWeight="700" color={textColor} mb="8px">
@@ -117,9 +126,9 @@ function SongOfTheDayCard() {
         onChange={(e) => setUrl(e.target.value)}
         mb="8px"
       />
-      {url.trim() && (
+      {isValidUrl(url.trim()) ? (
         <Link
-          href={url}
+          href={url.trim()}
           isExternal
           fontSize="sm"
           fontWeight="600"
@@ -128,10 +137,11 @@ function SongOfTheDayCard() {
         >
           🎵 Play my song of the day
         </Link>
-      )}
-      {!url.trim() && (
+      ) : (
         <Text fontSize="xs" color={textColorSecondary}>
-          Share your vibe with the team!
+          {url.trim()
+            ? 'Please enter a valid URL (https://…)'
+            : 'Share your vibe with the team!'}
         </Text>
       )}
     </Card>
