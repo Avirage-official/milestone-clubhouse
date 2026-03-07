@@ -1,170 +1,95 @@
 'use client';
-/*!
-  _   _  ___  ____  ___ ________  _   _   _   _ ___   
- | | | |/ _ \|  _ \|_ _|__  / _ \| \ | | | | | |_ _| 
- | |_| | | | | |_) || |  / / | | |  \| | | | | || | 
- |  _  | |_| |  _ < | | / /| |_| | |\  | | |_| || |
- |_| |_|\___/|_| \_\___/____\___/|_| \_|  \___/|___|
-                                                                                                                                                                                                                                                                                                                                       
-=========================================================
-* Milestone - v1.1.0
-=========================================================
-
-* Product Page: 
-* Copyright 2022 Milestone ()
-
-* Designed and Coded by Milestone
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 
 import {
   Box,
+  Button,
   Flex,
-  FormLabel,
-  Image,
-  Icon,
-  Select,
+  List,
+  ListItem,
   SimpleGrid,
+  Text,
   useColorModeValue,
 } from '@chakra-ui/react';
-// Custom components
-// import MiniCalendar from 'components/calendar/MiniCalendar';
-import MiniStatistics from 'components/card/MiniStatistics';
-import IconBox from 'components/icons/IconBox';
-import {
-  MdAddTask,
-  MdAttachMoney,
-  MdBarChart,
-  MdFileCopy,
-} from 'react-icons/md';
-import CheckTable from 'views/admin/default/components/CheckTable';
-import ComplexTable from 'views/admin/default/components/ComplexTable';
-import DailyTraffic from 'views/admin/default/components/DailyTraffic';
-import PieCard from 'views/admin/default/components/PieCard';
-import Tasks from 'views/admin/default/components/Tasks';
-import TotalSpent from 'views/admin/default/components/TotalSpent';
-import WeeklyRevenue from 'views/admin/default/components/WeeklyRevenue';
-import tableDataCheck from 'views/admin/default/variables/tableDataCheck';
-import tableDataComplex from 'views/admin/default/variables/tableDataComplex';
-// Assets
-import Usa from 'img/dashboards/usa.png';
+import Card from 'components/card/Card';
+import PetPlaceholder from 'views/admin/home/components/PetPlaceholder';
+import WorkFocusCard from 'views/admin/home/components/WorkFocusCard';
+import WellnessBreaksCard from 'views/admin/home/components/WellnessBreaksCard';
+import SocialFunCards from 'views/admin/home/components/SocialFunCards';
 
-export default function Default() {
-  // Chakra Color Mode
-
-  const brandColor = useColorModeValue('brand.500', 'white');
-  const boxBg = useColorModeValue('secondaryGray.300', 'whiteAlpha.100');
+export default function Home() {
+  const textColor = useColorModeValue('secondaryGray.900', 'white');
+  const textColorSecondary = useColorModeValue(
+    'secondaryGray.600',
+    'secondaryGray.400',
+  );
 
   return (
     <Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
-      <SimpleGrid
-        columns={{ base: 1, md: 2, lg: 3, '2xl': 6 }}
-        gap="20px"
-        mb="20px"
-      >
-        <MiniStatistics
-          startContent={
-            <IconBox
-              w="56px"
-              h="56px"
-              bg={boxBg}
-              icon={
-                <Icon w="32px" h="32px" as={MdBarChart} color={brandColor} />
-              }
-            />
-          }
-          name="Earnings"
-          value="$350.4"
-        />
-        <MiniStatistics
-          startContent={
-            <IconBox
-              w="56px"
-              h="56px"
-              bg={boxBg}
-              icon={
-                <Icon w="32px" h="32px" as={MdAttachMoney} color={brandColor} />
-              }
-            />
-          }
-          name="Spend this month"
-          value="$642.39"
-        />
-        <MiniStatistics growth="+23%" name="Sales" value="$574.34" />
-        <MiniStatistics
-          endContent={
-            <Flex me="-16px" mt="10px">
-              <FormLabel htmlFor="balance">
-                <Box boxSize={'12'}>
-                  <Image alt="" src={Usa.src} w={'100%'} h={'100%'} />
-                </Box>
-              </FormLabel>
-              <Select
-                id="balance"
-                variant="mini"
-                mt="5px"
-                me="0px"
-                defaultValue="usd"
-              >
-                <option value="usd">USD</option>
-                <option value="eur">EUR</option>
-                <option value="gba">GBA</option>
-              </Select>
-            </Flex>
-          }
-          name="Your balance"
-          value="$1,000"
-        />
-        <MiniStatistics
-          startContent={
-            <IconBox
-              w="56px"
-              h="56px"
-              bg="linear-gradient(90deg, #4481EB 0%, #04BEFE 100%)"
-              icon={<Icon w="28px" h="28px" as={MdAddTask} color="white" />}
-            />
-          }
-          name="New Tasks"
-          value="154"
-        />
-        <MiniStatistics
-          startContent={
-            <IconBox
-              w="56px"
-              h="56px"
-              bg={boxBg}
-              icon={
-                <Icon w="32px" h="32px" as={MdFileCopy} color={brandColor} />
-              }
-            />
-          }
-          name="Total Projects"
-          value="2935"
-        />
+      {/* A. Welcome + Pet & Notifications */}
+      <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px" mb="20px">
+        {/* Welcome Card */}
+        <Card>
+          <Text fontSize="2xl" fontWeight="700" color={textColor} mb="4px">
+            Welcome back, NovaFox!
+          </Text>
+          <Text fontSize="md" color={textColorSecondary}>
+            Your clubhouse is ready for today.
+          </Text>
+        </Card>
+
+        {/* Pet Check-in & Notifications Card */}
+        <Card>
+          <Flex
+            direction={{ base: 'column', md: 'row' }}
+            gap="20px"
+            align="flex-start"
+          >
+            {/* Pet area */}
+            <PetPlaceholder />
+
+            {/* Notifications */}
+            <Box flex="1">
+              <Text fontSize="sm" fontWeight="700" color={textColor} mb="8px">
+                Notifications
+              </Text>
+              <List spacing={3}>
+                <ListItem fontSize="sm" color={textColorSecondary}>
+                  🍫 Taylor sent a Snickers bar to your pet.
+                </ListItem>
+                <ListItem fontSize="sm" color={textColorSecondary}>
+                  <Flex align="center" gap="8px" wrap="wrap">
+                    <Text as="span">
+                      📅 Alex invited you to lunch today at 12:30.
+                    </Text>
+                    <Button
+                      size="xs"
+                      colorScheme="brand"
+                      borderRadius="8px"
+                    >
+                      Join
+                    </Button>
+                  </Flex>
+                </ListItem>
+              </List>
+            </Box>
+          </Flex>
+        </Card>
       </SimpleGrid>
 
-      <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px" mb="20px">
-        <TotalSpent />
-        <WeeklyRevenue />
+      {/* B. Work Focus & Progress */}
+      <SimpleGrid columns={{ base: 1 }} gap="20px" mb="20px">
+        <WorkFocusCard />
       </SimpleGrid>
-      <SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap="20px" mb="20px">
-        <CheckTable tableData={tableDataCheck} />
-        <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px">
-          <DailyTraffic />
-          <PieCard />
-        </SimpleGrid>
+
+      {/* C. Wellness & Breaks */}
+      <SimpleGrid columns={{ base: 1 }} gap="20px" mb="20px">
+        <WellnessBreaksCard />
       </SimpleGrid>
-      <SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap="20px" mb="20px">
-        <ComplexTable tableData={tableDataComplex} />
-        <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px">
-          <Tasks />
-          {/* <MiniCalendar h="100%" minW="100%" selectRange={false} /> */}
-        </SimpleGrid>
-      </SimpleGrid>
+
+      {/* D. Social & Fun */}
+      <Box mb="20px">
+        <SocialFunCards />
+      </Box>
     </Box>
   );
 }
