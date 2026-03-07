@@ -49,7 +49,7 @@ const routes: IRoute[] = [
     path: '/data-tables',
   },
   {
-    name: 'Profile',
+    name: 'Profile & Pet',
     layout: '/admin',
     path: '/profile',
     icon: <Icon as={MdPerson} width="20px" height="20px" color="inherit" />,
