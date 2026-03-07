@@ -36,9 +36,10 @@ export default function WorkspaceToolsCard() {
             size="sm"
             variant="outline"
             colorScheme="brand"
-            borderRadius="10px"
+            borderRadius="full"
             rel="noopener noreferrer"
-            _hover={{ textDecoration: 'none', bg: 'brand.500', color: 'white' }}
+            transition="all 0.25s ease"
+            _hover={{ textDecoration: 'none', bg: 'brand.500', color: 'white', transform: 'scale(1.06)' }}
           >
             {tool.label}
           </Button>

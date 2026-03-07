@@ -97,8 +97,10 @@ export default function WorkFocusCard() {
               icon={<Icon as={MdAdd} />}
               size="sm"
               colorScheme="brand"
-              borderRadius="10px"
+              borderRadius="full"
               onClick={addPriority}
+              transition="all 0.2s ease"
+              _hover={{ transform: 'scale(1.1) rotate(90deg)' }}
             />
           </Flex>
         )}
@@ -106,9 +108,14 @@ export default function WorkFocusCard() {
 
       {/* Streak */}
       <Flex align="center" gap="8px">
-        <Icon as={MdLocalFireDepartment} w="24px" h="24px" color="orange.400" />
+        <Box
+          transition="all 0.3s ease"
+          _hover={{ transform: 'scale(1.2)' }}
+        >
+          <Icon as={MdLocalFireDepartment} w="24px" h="24px" color="orange.400" />
+        </Box>
         <Text fontSize="sm" color={textColor} fontWeight="600">
-          5 day streak
+          5 day streak 🔥
         </Text>
         <Text fontSize="xs" color={textColorSecondary}>
           — Days with all priorities completed

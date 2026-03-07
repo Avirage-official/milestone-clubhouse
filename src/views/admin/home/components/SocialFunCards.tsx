@@ -38,10 +38,12 @@ function ChallengeCard() {
       <Button
         size="sm"
         colorScheme={done ? 'green' : 'brand'}
-        borderRadius="10px"
+        borderRadius="full"
         onClick={() => setDone(!done)}
+        transition="all 0.25s ease"
+        _hover={{ transform: 'scale(1.05)' }}
       >
-        {done ? '✅ Done!' : 'Mark as done'}
+        {done ? '✅ Done!' : '🎯 Mark as done'}
       </Button>
     </Card>
   );
@@ -68,15 +70,17 @@ function LunchBuddiesCard() {
           size="sm"
           variant="outline"
           colorScheme="brand"
-          borderRadius="10px"
+          borderRadius="full"
           onClick={onOpen}
+          transition="all 0.25s ease"
+          _hover={{ transform: 'scale(1.05)' }}
         >
-          View options
+          🍽️ View options
         </Button>
       </Card>
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent borderRadius="20px" p="8px">
+      <Modal isOpen={isOpen} onClose={onClose} isCentered motionPreset="slideInBottom">
+        <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(4px)" />
+        <ModalContent borderRadius="24px" p="8px">
           <ModalHeader>Lunch Options</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb="20px">

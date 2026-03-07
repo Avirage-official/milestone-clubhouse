@@ -25,6 +25,7 @@ export function SidebarLinks(props: SidebarLinksProps) {
   let activeIcon = useColorModeValue('brand.500', 'white');
   let textColor = useColorModeValue('secondaryGray.500', 'white');
   let brandColor = useColorModeValue('brand.500', 'brand.400');
+  let hoverBg = useColorModeValue('secondaryGray.300', 'navy.700');
 
   // verifies if routeName is the one active (in browser input)
   const activeRoute = useCallback(
@@ -45,7 +46,15 @@ export function SidebarLinks(props: SidebarLinksProps) {
         return (
           <Link key={index} href={route.layout + route.path}>
             {route.icon ? (
-              <Box>
+              <Box
+                borderRadius="12px"
+                mx="8px"
+                transition="all 0.25s ease"
+                _hover={{
+                  bg: hoverBg,
+                  transform: 'translateX(4px)',
+                }}
+              >
                 <HStack
                   spacing={
                     activeRoute(route.path.toLowerCase()) ? '22px' : '26px'
@@ -61,6 +70,7 @@ export function SidebarLinks(props: SidebarLinksProps) {
                           : textColor
                       }
                       me="18px"
+                      transition="all 0.2s ease"
                     >
                       {route.icon}
                     </Box>
@@ -76,6 +86,7 @@ export function SidebarLinks(props: SidebarLinksProps) {
                           ? 'bold'
                           : 'normal'
                       }
+                      transition="all 0.2s ease"
                     >
                       {route.name}
                     </Text>
@@ -89,11 +100,20 @@ export function SidebarLinks(props: SidebarLinksProps) {
                         : 'transparent'
                     }
                     borderRadius="5px"
+                    transition="all 0.3s ease"
                   />
                 </HStack>
               </Box>
             ) : (
-              <Box>
+              <Box
+                borderRadius="12px"
+                mx="8px"
+                transition="all 0.25s ease"
+                _hover={{
+                  bg: hoverBg,
+                  transform: 'translateX(4px)',
+                }}
+              >
                 <HStack
                   spacing={
                     activeRoute(route.path.toLowerCase()) ? '22px' : '26px'
@@ -111,6 +131,7 @@ export function SidebarLinks(props: SidebarLinksProps) {
                     fontWeight={
                       activeRoute(route.path.toLowerCase()) ? 'bold' : 'normal'
                     }
+                    transition="all 0.2s ease"
                   >
                     {route.name}
                   </Text>

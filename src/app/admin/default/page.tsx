@@ -9,6 +9,7 @@ import {
   SimpleGrid,
   Text,
   useColorModeValue,
+  keyframes,
 } from '@chakra-ui/react';
 import Card from 'components/card/Card';
 import PetPlaceholder from 'views/admin/home/components/PetPlaceholder';
@@ -16,6 +17,11 @@ import WorkFocusCard from 'views/admin/home/components/WorkFocusCard';
 import WellnessBreaksCard from 'views/admin/home/components/WellnessBreaksCard';
 import SocialFunCards from 'views/admin/home/components/SocialFunCards';
 import WorkspaceToolsCard from 'views/admin/home/components/WorkspaceToolsCard';
+
+const fadeUp = keyframes`
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
 
 export default function Home() {
   const textColor = useColorModeValue('secondaryGray.900', 'white');
@@ -27,11 +33,16 @@ export default function Home() {
   return (
     <Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
       {/* A. Welcome + Pet & Notifications */}
-      <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px" mb="20px">
+      <SimpleGrid
+        columns={{ base: 1, md: 2, xl: 2 }}
+        gap="20px"
+        mb="20px"
+        animation={`${fadeUp} 0.5s ease-out`}
+      >
         {/* Welcome Card */}
         <Card>
           <Text fontSize="2xl" fontWeight="700" color={textColor} mb="4px">
-            Welcome back, NovaFox!
+            Welcome back, NovaFox! 🎉
           </Text>
           <Text fontSize="md" color={textColorSecondary}>
             Your clubhouse is ready for today.
@@ -65,7 +76,9 @@ export default function Home() {
                     <Button
                       size="xs"
                       colorScheme="brand"
-                      borderRadius="8px"
+                      borderRadius="full"
+                      _hover={{ transform: 'scale(1.08)' }}
+                      transition="all 0.2s ease"
                     >
                       Join
                     </Button>
@@ -78,22 +91,32 @@ export default function Home() {
       </SimpleGrid>
 
       {/* B. Work Focus & Progress */}
-      <SimpleGrid columns={{ base: 1 }} gap="20px" mb="20px">
+      <SimpleGrid
+        columns={{ base: 1 }}
+        gap="20px"
+        mb="20px"
+        animation={`${fadeUp} 0.6s ease-out`}
+      >
         <WorkFocusCard />
       </SimpleGrid>
 
       {/* C. Wellness & Breaks */}
-      <SimpleGrid columns={{ base: 1 }} gap="20px" mb="20px">
+      <SimpleGrid
+        columns={{ base: 1 }}
+        gap="20px"
+        mb="20px"
+        animation={`${fadeUp} 0.7s ease-out`}
+      >
         <WellnessBreaksCard />
       </SimpleGrid>
 
       {/* D. Social & Fun */}
-      <Box mb="20px">
+      <Box mb="20px" animation={`${fadeUp} 0.8s ease-out`}>
         <SocialFunCards />
       </Box>
 
       {/* E. Workspace Tools */}
-      <Box mb="20px">
+      <Box mb="20px" animation={`${fadeUp} 0.9s ease-out`}>
         <WorkspaceToolsCard />
       </Box>
     </Box>
