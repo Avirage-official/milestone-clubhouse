@@ -5,6 +5,7 @@ import {
   MdHome,
   MdLock,
   MdSportsEsports,
+  MdEmojiEvents,
 } from 'react-icons/md';
 
 // Admin Imports
@@ -40,9 +41,11 @@ const routes: IRoute[] = [
     secondary: true,
   },
   {
-    name: 'Data Tables',
+    name: 'Hall of Fame',
     layout: '/admin',
-    icon: <Icon as={MdBarChart} width="20px" height="20px" color="inherit" />,
+    icon: (
+      <Icon as={MdEmojiEvents} width="20px" height="20px" color="inherit" />
+    ),
     path: '/data-tables',
   },
   {
