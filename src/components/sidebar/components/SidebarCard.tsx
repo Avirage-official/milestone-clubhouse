@@ -81,7 +81,7 @@ export default function SidebarDocs() {
           mb="14px"
           textAlign="center"
         >
-          Your fun &amp; productive workspace awaits!
+          Your fun & productive workspace awaits!
         </Text>
       </Flex>
       <Link href="">
