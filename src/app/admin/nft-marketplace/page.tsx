@@ -1,313 +1,356 @@
 'use client';
 /*!
-  _   _  ___  ____  ___ ________  _   _   _   _ ___   
- | | | |/ _ \|  _ \|_ _|__  / _ \| \ | | | | | |_ _| 
- | |_| | | | | |_) || |  / / | | |  \| | | | | || | 
- |  _  | |_| |  _ < | | / /| |_| | |\  | | |_| || |
- |_| |_|\___/|_| \_\___/____\___/|_| \_|  \___/|___|
-                                                                                                                                                                                                                                                                                                                                       
 =========================================================
 * Milestone - v1.1.0
 =========================================================
-
-* Product Page: 
-* Copyright 2022 Milestone ()
-
-* Designed and Coded by Milestone
-
+* Playground Page – Mini-games, quests, and ranks
 =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
 */
 
-import React from 'react';
-
-// Chakra imports
+import React, { useState, useEffect, useCallback } from 'react';
 import {
+  Badge,
   Box,
   Button,
+  Checkbox,
   Flex,
-  Grid,
+  Icon,
+  SimpleGrid,
   Text,
   useColorModeValue,
-  SimpleGrid,
-  Link,
+  useToast,
 } from '@chakra-ui/react';
-
-// Custom components
-import TableTopCreators from 'views/admin/marketplace/components/TableTopCreators';
-import HistoryItem from 'views/admin/marketplace/components/HistoryItem';
-import NFT from 'components/card/NFT';
+import {
+  MdSelfImprovement,
+  MdAdsClick,
+  MdGridOn,
+  MdTextFields,
+} from 'react-icons/md';
 import Card from 'components/card/Card';
-import tableDataTopCreators from 'views/admin/marketplace/variables/tableDataTopCreators';
+import BreathingBuddyGame from 'views/admin/playground/components/BreathingBuddyGame';
+import FocusTapGame from 'views/admin/playground/components/FocusTapGame';
+import MemoryMatchGame from 'views/admin/playground/components/MemoryMatchGame';
+import WordScrambleGame from 'views/admin/playground/components/WordScrambleGame';
 
-// Assets
-import Nft1 from 'img/nfts/Nft1.png';
-import Nft2 from 'img/nfts/Nft2.png';
-import Nft3 from 'img/nfts/Nft3.png';
-import Nft4 from 'img/nfts/Nft4.png';
-import Nft5 from 'img/nfts/Nft5.png';
-import Nft6 from 'img/nfts/Nft6.png';
-import Avatar1 from 'img/avatars/avatar1.png';
-import Avatar2 from 'img/avatars/avatar2.png';
-import Avatar3 from 'img/avatars/avatar3.png';
-import Avatar4 from 'img/avatars/avatar4.png';
-import AdminLayout from 'layouts/admin';
+// --- Rank mapping ---
+function getRank(xp: number): string {
+  if (xp >= 2000) return 'General';
+  if (xp >= 1000) return 'Captain';
+  if (xp >= 500) return 'Sergeant';
+  return 'Cadet';
+}
 
-export default function NftMarketplace() {
-  // Chakra Color Mode
+// --- Cooldown: 1 hour ---
+const COOLDOWN_MS = 60 * 60 * 1000;
+
+// --- Game definitions ---
+const GAMES = [
+  {
+    id: 'breathing',
+    name: 'Breathing Buddy',
+    description: 'Guided 4-4-4-4 breathing exercise',
+    duration: '3 min',
+    xp: 10,
+    icon: MdSelfImprovement,
+  },
+  {
+    id: 'focusTap',
+    name: 'Focus Tap',
+    description: 'Tap highlighted tiles as fast as you can',
+    duration: '2 min',
+    xp: 15,
+    icon: MdAdsClick,
+  },
+  {
+    id: 'memory',
+    name: 'Memory Match',
+    description: 'Match pairs of emoji cards',
+    duration: '3 min',
+    xp: 20,
+    icon: MdGridOn,
+  },
+  {
+    id: 'wordScramble',
+    name: 'Word Scramble',
+    description: 'Unscramble the hidden words',
+    duration: '2 min',
+    xp: 10,
+    icon: MdTextFields,
+  },
+] as const;
+
+// --- Quests ---
+const QUESTS = [
+  {
+    id: 'walk',
+    title: 'Mindful Walk',
+    description:
+      'Take a 10-minute walk outside and notice 3 things you appreciate.',
+  },
+  {
+    id: 'chat',
+    title: 'Social Connect',
+    description: 'Have a non-work chat with a teammate.',
+  },
+  {
+    id: 'song',
+    title: 'Song of the Day',
+    description: 'Share your song of the day in the clubhouse.',
+  },
+];
+
+export default function Playground() {
+  const [xp, setXp] = useState(0);
+  const [lastXpGameTime, setLastXpGameTime] = useState<number>(0);
+  const [countdown, setCountdown] = useState('');
+  const [questsDone, setQuestsDone] = useState<Record<string, boolean>>({});
+  const [activeGame, setActiveGame] = useState<string | null>(null);
+
+  const toast = useToast();
   const textColor = useColorModeValue('secondaryGray.900', 'white');
-  const textColorBrand = useColorModeValue('brand.500', 'white');
+  const brandColor = useColorModeValue('brand.500', 'brand.400');
+  const badgeAvailableBg = useColorModeValue('green.100', 'green.500');
+  const badgeCooldownBg = useColorModeValue('orange.100', 'orange.500');
+
+  // Load state from localStorage
+  useEffect(() => {
+    try {
+      const storedXp = localStorage.getItem('playground_xp');
+      const storedTime = localStorage.getItem('playground_lastXpGameTime');
+      const storedQuests = localStorage.getItem('playground_quests');
+      if (storedXp) setXp(parseInt(storedXp, 10));
+      if (storedTime) setLastXpGameTime(parseInt(storedTime, 10));
+      if (storedQuests) setQuestsDone(JSON.parse(storedQuests));
+    } catch (e) {
+      console.warn('Failed to load playground state from localStorage:', e);
+    }
+  }, []);
+
+  // Countdown timer
+  useEffect(() => {
+    const tick = () => {
+      if (!lastXpGameTime) {
+        setCountdown('');
+        return;
+      }
+      const elapsed = Date.now() - lastXpGameTime;
+      const remaining = COOLDOWN_MS - elapsed;
+      if (remaining <= 0) {
+        setCountdown('');
+      } else {
+        const mins = Math.floor(remaining / 60000);
+        const secs = Math.floor((remaining % 60000) / 1000);
+        setCountdown(
+          `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`,
+        );
+      }
+    };
+    tick();
+    const interval = setInterval(tick, 1000);
+    return () => clearInterval(interval);
+  }, [lastXpGameTime]);
+
+  const xpAvailable =
+    !lastXpGameTime || Date.now() - lastXpGameTime >= COOLDOWN_MS;
+
+  const handleGameComplete = useCallback(
+    (xpAmount: number) => {
+      if (xpAvailable) {
+        const newXp = xp + xpAmount;
+        const now = Date.now();
+        setXp(newXp);
+        setLastXpGameTime(now);
+        localStorage.setItem('playground_xp', String(newXp));
+        localStorage.setItem('playground_lastXpGameTime', String(now));
+        toast({
+          title: `+${xpAmount} XP earned!`,
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: 'XP is on cooldown',
+          description: 'You can still play for fun.',
+          status: 'info',
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+      setActiveGame(null);
+    },
+    [xp, xpAvailable, toast],
+  );
+
+  const toggleQuest = (id: string) => {
+    const updated = { ...questsDone, [id]: !questsDone[id] };
+    setQuestsDone(updated);
+    localStorage.setItem('playground_quests', JSON.stringify(updated));
+  };
+
   return (
     <Box pt={{ base: '180px', md: '80px', xl: '80px' }}>
-      {/* Main Fields */}
-      <Grid
-        mb="20px"
-        gridTemplateColumns={{ xl: 'repeat(3, 1fr)', '2xl': '1fr 0.46fr' }}
-        gap={{ base: '20px', xl: '20px' }}
-        display={{ base: 'block', xl: 'grid' }}
-      >
+      {/* --- Status Bar --- */}
+      <Card mb="20px" p="20px">
         <Flex
-          flexDirection="column"
-          gridArea={{ xl: '1 / 1 / 2 / 3', '2xl': '1 / 1 / 2 / 2' }}
+          direction={{ base: 'column', md: 'row' }}
+          justify="space-between"
+          align={{ base: 'start', md: 'center' }}
+          gap="16px"
         >
-          {/* <Banner /> */}
           <Flex direction="column">
-            <Flex
-              mt="45px"
-              mb="20px"
-              justifyContent="space-between"
-              direction={{ base: 'column', md: 'row' }}
-              align={{ base: 'start', md: 'center' }}
-            >
-              <Text color={textColor} fontSize="2xl" ms="24px" fontWeight="700">
-                Trending NFTs
-              </Text>
-              <Flex
-                align="center"
-                me="20px"
-                ms={{ base: '24px', md: '0px' }}
-                mt={{ base: '20px', md: '0px' }}
-              >
-                <Link
-                  href="#art"
-                  color={textColorBrand}
-                  fontWeight="500"
-                  me={{ base: '34px', md: '44px' }}
-                >
-                  Art
-                </Link>
-                <Link
-                  href="#music"
-                  color={textColorBrand}
-                  fontWeight="500"
-                  me={{ base: '34px', md: '44px' }}
-                >
-                  Music
-                </Link>
-                <Link
-                  href="#collectibles"
-                  color={textColorBrand}
-                  fontWeight="500"
-                  me={{ base: '34px', md: '44px' }}
-                >
-                  Collectibles
-                </Link>
-                <Link href="#sports" color={textColorBrand} fontWeight="500">
-                  Sports
-                </Link>
-              </Flex>
-            </Flex>
-            <SimpleGrid columns={{ base: 1, md: 3 }} gap="20px">
-              <NFT
-                name="Abstract Colors"
-                author="By Esthera Jackson"
-                bidders={[
-                  Avatar1,
-                  Avatar2,
-                  Avatar3,
-                  Avatar4,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                ]}
-                image={Nft1}
-                currentbid="0.91 ETH"
-                download="#"
-              />
-              <NFT
-                name="ETH AI Brain"
-                author="By Nick Wilson"
-                bidders={[
-                  Avatar1,
-                  Avatar2,
-                  Avatar3,
-                  Avatar4,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                ]}
-                image={Nft2}
-                currentbid="0.91 ETH"
-                download="#"
-              />
-              <NFT
-                name="Mesh Gradients "
-                author="By Will Smith"
-                bidders={[
-                  Avatar1,
-                  Avatar2,
-                  Avatar3,
-                  Avatar4,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                ]}
-                image={Nft3}
-                currentbid="0.91 ETH"
-                download="#"
-              />
-            </SimpleGrid>
-            <Text
-              mt="45px"
-              mb="36px"
-              color={textColor}
-              fontSize="2xl"
-              ms="24px"
-              fontWeight="700"
-            >
-              Recently Added
+            <Text color="secondaryGray.600" fontSize="sm" fontWeight="500">
+              XP
             </Text>
-            <SimpleGrid
-              columns={{ base: 1, md: 3 }}
-              gap="20px"
-              mb={{ base: '20px', xl: '0px' }}
-            >
-              <NFT
-                name="Swipe Circles"
-                author="By Peter Will"
-                bidders={[
-                  Avatar1,
-                  Avatar2,
-                  Avatar3,
-                  Avatar4,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                ]}
-                image={Nft4}
-                currentbid="0.91 ETH"
-                download="#"
-              />
-              <NFT
-                name="Colorful Heaven"
-                author="By Mark Benjamin"
-                bidders={[
-                  Avatar1,
-                  Avatar2,
-                  Avatar3,
-                  Avatar4,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                ]}
-                image={Nft5}
-                currentbid="0.91 ETH"
-                download="#"
-              />
-              <NFT
-                name="3D Cubes Art"
-                author="By Manny Gates"
-                bidders={[
-                  Avatar1,
-                  Avatar2,
-                  Avatar3,
-                  Avatar4,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                  Avatar1,
-                ]}
-                image={Nft6}
-                currentbid="0.91 ETH"
-                download="#"
-              />
-            </SimpleGrid>
+            <Text color={textColor} fontSize="2xl" fontWeight="700">
+              {xp.toLocaleString()} XP
+            </Text>
+          </Flex>
+          <Flex direction="column">
+            <Text color="secondaryGray.600" fontSize="sm" fontWeight="500">
+              Rank
+            </Text>
+            <Text color={brandColor} fontSize="2xl" fontWeight="700">
+              {getRank(xp)}
+            </Text>
+          </Flex>
+          <Flex direction="column">
+            <Text color="secondaryGray.600" fontSize="sm" fontWeight="500">
+              Next available game in
+            </Text>
+            <Text color={textColor} fontSize="2xl" fontWeight="700">
+              {countdown || 'Ready!'}
+            </Text>
           </Flex>
         </Flex>
-        <Flex
-          flexDirection="column"
-          gridArea={{ xl: '1 / 3 / 2 / 4', '2xl': '1 / 2 / 2 / 3' }}
-        >
-          <Card px="0px" mb="20px">
-            <TableTopCreators tableData={tableDataTopCreators} />
-          </Card>
-          <Card p="0px">
-            <Flex
-              align={{ sm: 'flex-start', lg: 'center' }}
-              justify="space-between"
-              w="100%"
-              px="22px"
-              py="18px"
-            >
-              <Text color={textColor} fontSize="xl" fontWeight="600">
-                History
-              </Text>
-              <Button variant="action">See all</Button>
-            </Flex>
+      </Card>
 
-            <HistoryItem
-              name="Colorful Heaven"
-              author="By Mark Benjamin"
-              date="30s ago"
-              image={Nft5}
-              price="0.91 ETH"
-            />
-            <HistoryItem
-              name="Abstract Colors"
-              author="By Esthera Jackson"
-              date="58s ago"
-              image={Nft1}
-              price="0.91 ETH"
-            />
-            <HistoryItem
-              name="ETH AI Brain"
-              author="By Nick Wilson"
-              date="1m ago"
-              image={Nft2}
-              price="0.91 ETH"
-            />
-            <HistoryItem
-              name="Swipe Circles"
-              author="By Peter Will"
-              date="1m ago"
-              image={Nft4}
-              price="0.91 ETH"
-            />
-            <HistoryItem
-              name="Mesh Gradients "
-              author="By Will Smith"
-              date="2m ago"
-              image={Nft3}
-              price="0.91 ETH"
-            />
-            <HistoryItem
-              name="3D Cubes Art"
-              author="By Manny Gates"
-              date="3m ago"
-              image={Nft6}
-              price="0.91 ETH"
-            />
+      {/* --- Mini-games Grid --- */}
+      <Text
+        color={textColor}
+        fontSize="2xl"
+        ms="4px"
+        mb="20px"
+        fontWeight="700"
+      >
+        Mini-games
+      </Text>
+      <SimpleGrid columns={{ base: 1, md: 2, xl: 4 }} gap="20px" mb="30px">
+        {GAMES.map((game) => (
+          <Card key={game.id} p="20px">
+            <Flex direction="column" justify="space-between" h="100%">
+              <Box>
+                <Flex align="center" mb="10px">
+                  <Icon
+                    as={game.icon}
+                    w="28px"
+                    h="28px"
+                    color={brandColor}
+                    me="10px"
+                  />
+                  <Text color={textColor} fontSize="lg" fontWeight="bold">
+                    {game.name}
+                  </Text>
+                </Flex>
+                <Text color="secondaryGray.600" fontSize="sm" mb="8px">
+                  {game.description}
+                </Text>
+                <Text color="secondaryGray.500" fontSize="xs" mb="12px">
+                  ~{game.duration}
+                </Text>
+              </Box>
+              <Flex justify="space-between" align="center">
+                <Badge
+                  px="8px"
+                  py="2px"
+                  borderRadius="8px"
+                  bg={xpAvailable ? badgeAvailableBg : badgeCooldownBg}
+                  color={xpAvailable ? 'green.700' : 'orange.700'}
+                  fontSize="xs"
+                  fontWeight="600"
+                >
+                  {xpAvailable ? 'XP available' : 'XP on cooldown'}
+                </Badge>
+                <Button
+                  variant="darkBrand"
+                  color="white"
+                  fontSize="sm"
+                  fontWeight="500"
+                  borderRadius="70px"
+                  px="24px"
+                  py="5px"
+                  onClick={() => setActiveGame(game.id)}
+                >
+                  Play
+                </Button>
+              </Flex>
+            </Flex>
           </Card>
-        </Flex>
-      </Grid>
-      {/* Delete Product */}
+        ))}
+      </SimpleGrid>
+
+      {/* --- Quests Section --- */}
+      <Text
+        color={textColor}
+        fontSize="2xl"
+        ms="4px"
+        mb="20px"
+        fontWeight="700"
+      >
+        Today&apos;s Quests
+      </Text>
+      <SimpleGrid columns={{ base: 1, md: 3 }} gap="20px" mb="20px">
+        {QUESTS.map((quest) => (
+          <Card key={quest.id} p="20px">
+            <Flex direction="column" justify="space-between" h="100%">
+              <Box mb="12px">
+                <Text
+                  color={textColor}
+                  fontSize="lg"
+                  fontWeight="bold"
+                  mb="6px"
+                >
+                  {quest.title}
+                </Text>
+                <Text color="secondaryGray.600" fontSize="sm">
+                  {quest.description}
+                </Text>
+              </Box>
+              <Checkbox
+                colorScheme="brandScheme"
+                isChecked={!!questsDone[quest.id]}
+                onChange={() => toggleQuest(quest.id)}
+              >
+                <Text color={textColor} fontSize="sm" fontWeight="500">
+                  Mark as done
+                </Text>
+              </Checkbox>
+            </Flex>
+          </Card>
+        ))}
+      </SimpleGrid>
+
+      {/* --- Game Modals --- */}
+      <BreathingBuddyGame
+        isOpen={activeGame === 'breathing'}
+        onClose={() => setActiveGame(null)}
+        onComplete={handleGameComplete}
+      />
+      <FocusTapGame
+        isOpen={activeGame === 'focusTap'}
+        onClose={() => setActiveGame(null)}
+        onComplete={handleGameComplete}
+      />
+      <MemoryMatchGame
+        isOpen={activeGame === 'memory'}
+        onClose={() => setActiveGame(null)}
+        onComplete={handleGameComplete}
+      />
+      <WordScrambleGame
+        isOpen={activeGame === 'wordScramble'}
+        onClose={() => setActiveGame(null)}
+        onComplete={handleGameComplete}
+      />
     </Box>
   );
 }

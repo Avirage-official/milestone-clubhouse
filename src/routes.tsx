@@ -4,7 +4,7 @@ import {
   MdPerson,
   MdHome,
   MdLock,
-  MdOutlineShoppingCart,
+  MdSportsEsports,
 } from 'react-icons/md';
 
 // Admin Imports
@@ -26,12 +26,12 @@ const routes: IRoute[] = [
     icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
   },
   {
-    name: 'NFT Marketplace',
+    name: 'Playground',
     layout: '/admin',
     path: '/nft-marketplace',
     icon: (
       <Icon
-        as={MdOutlineShoppingCart}
+        as={MdSportsEsports}
         width="20px"
         height="20px"
         color="inherit"
