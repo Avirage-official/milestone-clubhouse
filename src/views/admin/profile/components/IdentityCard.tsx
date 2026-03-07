@@ -32,6 +32,19 @@ export default function IdentityCard(props: IdentityCardProps) {
   const inputBg = useColorModeValue('secondaryGray.300', 'navy.700');
   const inputText = useColorModeValue('secondaryGray.900', 'white');
 
+  const handleTimeZoneChange = (value: string) => {
+    if (value === 'More') {
+      toast({
+        title: 'More time zones coming soon',
+        status: 'info',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+    onChange('timeZone', value);
+  };
+
   const handleSave = () => {
     const data = { firstName, clubhouseName, role, timeZone };
     console.log('Profile saved (demo only):', data);
@@ -115,7 +128,7 @@ export default function IdentityCard(props: IdentityCardProps) {
           </FormLabel>
           <Select
             value={timeZone}
-            onChange={(e) => onChange('timeZone', e.target.value)}
+            onChange={(e) => handleTimeZoneChange(e.target.value)}
             bg={inputBg}
             color={inputText}
             border="none"
