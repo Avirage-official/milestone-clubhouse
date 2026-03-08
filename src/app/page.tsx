@@ -68,6 +68,8 @@ export default function Home() {
           {['Features', 'Games', 'Leaderboard', 'Contact'].map((item) => (
             <Text
               key={item}
+              as="a"
+              href="#hero"
               fontSize="sm"
               fontWeight="500"
               color="whiteAlpha.900"
@@ -174,6 +176,7 @@ export default function Home() {
 
       {/* ── Hero Image + Floating Cards ── */}
       <Box
+        id="hero"
         position="relative"
         maxW="1200px"
         mx="auto"
@@ -355,7 +358,7 @@ export default function Home() {
           </Text>
           <Text fontSize="10px" color="secondaryGray.600" lineHeight="1.5">
             Great sprint everyone! Top wins: shipped the new playground,
-            onboarding flow got 4.8★ feedback. Let&apos;s keep the momentum going.
+            onboarding flow got 4.8★ feedback. Let{"'"}s keep the momentum going.
           </Text>
         </Box>
 
