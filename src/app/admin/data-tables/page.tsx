@@ -6,6 +6,8 @@
 * Hall of Fame Page – Leaderboards and personal standing
 =========================================================
 */
+// Data currently comes from clubhouseData mock helpers; when Supabase is
+// connected and NEXT_PUBLIC_DB_ENABLED=true, these helpers will use Prisma instead.
 
 import React from 'react';
 import {
@@ -23,14 +25,10 @@ import {
   keyframes,
 } from '@chakra-ui/react';
 import Card from 'components/card/Card';
-
-// --- Rank mapping (same as Playground) ---
-function getRankTitle(xp: number): string {
-  if (xp >= 2000) return 'General';
-  if (xp >= 1000) return 'Captain';
-  if (xp >= 500) return 'Sergeant';
-  return 'Cadet';
-}
+import {
+  getHallOfFameLeaderboards,
+  getRankTitle,
+} from 'lib/clubhouseData';
 
 // --- Current user ---
 const currentUser = 'NovaFox';

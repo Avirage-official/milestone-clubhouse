@@ -6,6 +6,8 @@
 * Playground Page – Mini-games, quests, and ranks
 =========================================================
 */
+// Data currently comes from clubhouseData mock helpers; when Supabase is
+// connected and NEXT_PUBLIC_DB_ENABLED=true, these helpers will use Prisma instead.
 
 import React, { useState, useEffect, useCallback } from 'react';
 import {
@@ -32,13 +34,15 @@ import BreathingBuddyGame from 'views/admin/playground/components/BreathingBuddy
 import FocusTapGame from 'views/admin/playground/components/FocusTapGame';
 import MemoryMatchGame from 'views/admin/playground/components/MemoryMatchGame';
 import WordScrambleGame from 'views/admin/playground/components/WordScrambleGame';
+import {
+  getPlaygroundStatus,
+  recordGameSession,
+  getRankTitle,
+} from 'lib/clubhouseData';
 
-// --- Rank mapping ---
+// --- Rank mapping (uses shared helper from clubhouseData) ---
 function getRank(xp: number): string {
-  if (xp >= 2000) return 'General';
-  if (xp >= 1000) return 'Captain';
-  if (xp >= 500) return 'Sergeant';
-  return 'Cadet';
+  return getRankTitle(xp);
 }
 
 // --- Cooldown: 1 hour ---

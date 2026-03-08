@@ -1,4 +1,6 @@
 'use client';
+// Data currently comes from clubhouseData mock helpers; when Supabase is
+// connected and NEXT_PUBLIC_DB_ENABLED=true, these helpers will use Prisma instead.
 
 import {
   Box,
@@ -17,6 +19,7 @@ import WorkFocusCard from 'views/admin/home/components/WorkFocusCard';
 import WellnessBreaksCard from 'views/admin/home/components/WellnessBreaksCard';
 import SocialFunCards from 'views/admin/home/components/SocialFunCards';
 import WorkspaceToolsCard from 'views/admin/home/components/WorkspaceToolsCard';
+import { getHomePageData } from 'lib/clubhouseData';
 
 const fadeUp = keyframes`
   from { opacity: 0; transform: translateY(20px); }
