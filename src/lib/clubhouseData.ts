@@ -225,7 +225,7 @@ export async function recordGameSession(
   const session = await prisma.gameSession.create({
     data: {
       userId: input.userId,
-      gameType: input.gameType as never, // enum cast
+      gameType: input.gameType,
       durationSec: input.durationSec,
       score: input.score,
       xpEarned,
@@ -241,15 +241,22 @@ export async function recordGameSession(
   };
   if (counterField) incrementData[counterField] = 1;
 
+  // Build the increment update for UserStats
+  const updateIncrements: Record<string, { increment: number }> = {
+    totalXp: { increment: xpEarned },
+    gamesPlayed: { increment: 1 },
+  };
+  if (counterField) {
+    updateIncrements[counterField] = { increment: 1 };
+  }
+
   await prisma.userStats.upsert({
     where: { userId: input.userId },
     create: {
       userId: input.userId,
       ...incrementData,
     },
-    update: Object.fromEntries(
-      Object.entries(incrementData).map(([k, v]) => [k, { increment: v }]),
-    ),
+    update: updateIncrements,
   });
 
   return {
