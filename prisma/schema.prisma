@@ -1,0 +1,412 @@
+// Keep the generator and datasource blocks Prisma created for you:
+// generator client { ... }
+// datasource db { provider = "postgresql" url = env("DATABASE_URL") }
+
+model Company {
+  id          String   @id @default(cuid())
+  name        String
+  domain      String?        // e.g. avirage.com
+  region      String?        // e.g. "APAC", "EU"
+  users       User[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  name        String?
+  role        UserRole @default(MEMBER)   // member / manager / admin
+  company     Company  @relation(fields: [companyId], references: [id])
+  companyId   String
+
+  profile     Profile?
+  gameSessions GameSession[]
+  userStats   UserStats?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum UserRole {
+  MEMBER
+  MANAGER
+  ADMIN
+}
+
+model Profile {
+  id              String   @id @default(cuid())
+  user            User     @relation(fields: [userId], references: [id])
+  userId          String   @unique
+
+  clubhouseName   String?  // name shown on leaderboards
+  avatarUrl       String?
+  roleOrTeam      String?  // e.g. "Product", "Sales"
+  timezone        String?
+
+  // Pet
+  petType         PetType?   // Dog, Cat, Fox, etc.
+  petName         String?
+  petPersonality  PetPersonality? // Chill, Energetic, Motivator
+
+  // Preferences
+  breakRemindersEnabled  Boolean @default(true)
+  petNudgesEnabled       Boolean @default(true)
+  includeInLeaderboards  Boolean @default(true)
+  notificationTone       NotificationTone @default(CHILL)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+enum PetType {
+  DOG
+  CAT
+  FOX
+  PANDA
+  OWL
+}
+
+enum PetPersonality {
+  CHILL
+  ENERGETIC
+  MOTIVATOR
+}
+
+enum NotificationTone {
+  CHILL
+  PLAYFUL
+}
+
+model GameSession {
+  id          String      @id @default(cuid())
+  user        User        @relation(fields: [userId], references: [id])
+  userId      String
+
+  gameType    GameType    // breathing, focus tap, etc.
+  startedAt   DateTime    @default(now())
+  endedAt     DateTime?
+  durationSec Int?        // convenience
+
+  score       Int?        // e.g. reaction time score, matches, correct words
+  xpEarned    Int         @default(0)
+  xpCounted   Boolean     @default(false) // true if it actually granted XP (not on cooldown)
+
+  createdAt   DateTime    @default(now())
+}
+
+enum GameType {
+  BREATHING_BUDDY
+  FOCUS_TAP
+  MEMORY_MATCH
+  WORD_SCRAMBLE
+}
+
+model UserStats {
+  id                 String   @id @default(cuid())
+  user               User     @relation(fields: [userId], references: [id])
+  userId             String   @unique
+
+  totalXp            Int      @default(0)
+  currentRank        Rank     @default(CADET)
+
+  gamesPlayed        Int      @default(0)
+  breathingSessions  Int      @default(0)
+  focusTapSessions   Int      @default(0)
+  memoryMatchSessions Int     @default(0)
+  wordScrambleSessions Int    @default(0)
+
+  // later you can add: lunchesCount, questsCompleted, etc.
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+enum Rank {
+  CADET
+  SERGEANT
+  CAPTAIN
+  GENERAL
+}
+// Existing models above: Company, User, Profile, GameSession, UserStats, enums...
+
+// ---------- ORG & INVITES ----------
+
+model Team {
+  id          String   @id @default(cuid())
+  name        String
+  company     Company  @relation(fields: [companyId], references: [id])
+  companyId   String
+
+  members     User[]   @relation("TeamMembers")
+  managers    User[]   @relation("TeamManagers")
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Invitation {
+  id          String    @id @default(cuid())
+  company     Company   @relation(fields: [companyId], references: [id])
+  companyId   String
+
+  email       String
+  role        UserRole  @default(MEMBER)
+  teamId      String?   // optional team to join on accept
+
+  token       String    @unique
+  status      InviteStatus @default(PENDING)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  expiresAt   DateTime?
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
+  CANCELLED
+}
+
+// ---------- COMPANY CONFIG ----------
+
+model CompanySettings {
+  id                    String   @id @default(cuid())
+  company               Company  @relation(fields: [companyId], references: [id])
+  companyId             String   @unique
+
+  enablePlayground      Boolean  @default(true)
+  enableHallOfFame      Boolean  @default(true)
+  enableLunchBuddies    Boolean  @default(true)
+  enableManagerView     Boolean  @default(false)
+
+  dataRetentionDays     Int?     // null = indefinite
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model WorkspaceTool {
+  id          String   @id @default(cuid())
+  company     Company  @relation(fields: [companyId], references: [id])
+  companyId   String
+
+  label       String
+  url         String
+  icon        String?  // optional icon name/key
+  order       Int      @default(0)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ---------- DAILY FOCUS, SESSIONS & BREAKS ----------
+
+model TaskFocusDay {
+  id          String   @id @default(cuid())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+
+  date        DateTime // store as date at midnight UTC
+  priority1   String?
+  priority1Done Boolean @default(false)
+  priority2   String?
+  priority2Done Boolean @default(false)
+  priority3   String?
+  priority3Done Boolean @default(false)
+
+  allDone     Boolean  @default(false)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, date])
+}
+
+model WorkSession {
+  id          String    @id @default(cuid())
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String
+
+  startedAt   DateTime  @default(now())
+  endedAt     DateTime?
+  origin      WorkSessionOrigin @default(MANUAL) // how it started
+
+  breakCount  Int       @default(0)
+
+  createdAt   DateTime  @default(now())
+}
+
+enum WorkSessionOrigin {
+  MANUAL
+  AFTER_GAME
+}
+
+model BreakEvent {
+  id          String    @id @default(cuid())
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String
+
+  occurredAt  DateTime  @default(now())
+  type        BreakType
+  durationSec Int?
+
+  workSession WorkSession? @relation(fields: [workSessionId], references: [id])
+  workSessionId String?
+
+  createdAt   DateTime  @default(now())
+}
+
+enum BreakType {
+  MICRO_GAME
+  BREATHING
+  WALK
+  OTHER
+}
+
+// ---------- QUESTS & LUNCH BUDDIES ----------
+
+model Quest {
+  id          String        @id @default(cuid())
+  company     Company?      @relation(fields: [companyId], references: [id])
+  companyId   String?
+
+  title       String
+  description String
+  category    QuestCategory
+  xpReward    Int           @default(0)   // 0 = no XP
+  active      Boolean       @default(true)
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+enum QuestCategory {
+  WELLNESS
+  SOCIAL
+  PRODUCTIVITY
+}
+
+model QuestLog {
+  id          String   @id @default(cuid())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+
+  quest       Quest    @relation(fields: [questId], references: [id])
+  questId     String
+
+  completedAt DateTime @default(now())
+  note        String?
+
+  createdAt   DateTime @default(now())
+
+  @@index([userId, completedAt])
+}
+
+model LunchIntent {
+  id          String    @id @default(cuid())
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String
+
+  date        DateTime  // day they’re free
+  timeWindow  String?   // e.g. "12:00–13:00"
+  location    String?   // area or office
+
+  active      Boolean   @default(true)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model LunchMatch {
+  id          String    @id @default(cuid())
+  company     Company   @relation(fields: [companyId], references: [id])
+  companyId   String
+
+  date        DateTime
+  venue       String?
+  status      LunchMatchStatus @default(PROPOSED)
+
+  // participants: many-to-many via join table LunchMatchParticipant
+  participants LunchMatchParticipant[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model LunchMatchParticipant {
+  id          String     @id @default(cuid())
+  lunchMatch  LunchMatch @relation(fields: [lunchMatchId], references: [id])
+  lunchMatchId String
+
+  user        User       @relation(fields: [userId], references: [id])
+  userId      String
+
+  createdAt   DateTime   @default(now())
+
+  @@unique([lunchMatchId, userId])
+}
+
+enum LunchMatchStatus {
+  PROPOSED
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+// ---------- STATS, STREAKS, REWARDS ----------
+
+model StreakLog {
+  id           String      @id @default(cuid())
+  user         User        @relation(fields: [userId], references: [id])
+  userId       String
+
+  streakType   StreakType
+  currentLength Int       @default(0)
+  bestLength   Int       @default(0)
+  lastUpdated  DateTime   @default(now())
+
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([userId, streakType])
+}
+
+enum StreakType {
+  DAILY_PRIORITIES
+  BREAKS
+  QUESTS
+}
+
+model RewardLog {
+  id          String      @id @default(cuid())
+  user        User        @relation(fields: [userId], references: [id])
+  userId      String
+
+  type        RewardType
+  reason      String?
+  awardedAt   DateTime    @default(now())
+
+  createdAt   DateTime    @default(now())
+}
+
+enum RewardType {
+  BADGE
+  PERK
+  BONUS_XP
+}
+
+// ---------- SIMPLE EVENT / AUDIT (OPTIONAL) ----------
+
+model EventLog {
+  id          String    @id @default(cuid())
+  user        User?     @relation(fields: [userId], references: [id])
+  userId      String?
+
+  type        String    // e.g. "profile_updated", "preferences_changed"
+  details     Json?
+  createdAt   DateTime  @default(now())
+
+  @@index([type, createdAt])
+}
